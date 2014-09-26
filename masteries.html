@@ -1,0 +1,130 @@
+<html>
+<head>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="styles/masteries.css">
+	<script src="scripts/masteriesData.js"></script>
+	<script src="scripts/boxfiller.js"></script>
+</head>
+<body>
+	<div>
+		<div id="availablePoints" class="counter"></div>
+		<div id="offensePoints" class="counter"></div>
+		<div id="defensePoints" class="counter"></div>
+		<div id="utilityPoints" class="counter"></div>
+	</div>
+	<div id = "treeOffense" class="tree">
+		<div id="r0" class="row">
+			<div id="m0" class="mastery" ></div>
+			<div id="m1" class="mastery" ></div>
+			<div id="m2" class="mastery" ></div>
+			<div id="m3" class="mastery" ></div>
+		</div>
+		<div id="r1" class="row">
+			<div id="m4" class="mastery" ></div>
+			<div id="m5" class="mastery" ></div>
+			<div id="m6" class="mastery" ></div>
+			<div id="m7" class="mastery" ></div>
+		</div>
+		<div id="r2" class="row">
+			<div id="m8" class="mastery"></div>
+			<div id="m9" class="mastery"></div>
+			<div id="m10" class="mastery"></div>
+			<div id="m11" class="mastery"></div>
+		</div>
+		<div id="r3" class="row">
+			<div id="m12" class="mastery"></div>
+			<div id="m13" class="mastery"></div>
+			<div id="m14" class="mastery"></div>
+			<div id="m15" class="mastery"></div>
+		</div>
+		<div id="r4" class="row">
+			<div id="m16" class="mastery"></div>
+			<div id="m17" class="mastery"></div>
+			<div id="m18" class="mastery invis"></div>
+			<div id="m19" class="mastery"></div>
+		</div>
+		<div id="r5" class="row">
+			<div id="m20" class="mastery invis"></div>
+			<div id="m21" class="mastery"></div>
+			<div id="m22" class="mastery invis"></div>
+			<div id="m23" class="mastery invis"></div>
+		</div>
+	</div>
+	<div id = "treeDefense" class="tree">
+		<div id="r0" class="row">
+			<div id="m24" class="mastery"></div>
+			<div id="m25" class="mastery"></div>
+			<div id="m26" class="mastery"></div>
+			<div id="m27" class="mastery"></div>
+		</div>
+		<div id="r1" class="row">
+			<div id="m28" class="mastery"></div>
+			<div id="m29" class="mastery"></div>
+			<div id="m30" class="mastery invis"></div>
+			<div id="m31" class="mastery"></div>
+		</div>
+		<div id="r2" class="row">
+			<div id="m32" class="mastery"></div>
+			<div id="m33" class="mastery"></div>
+			<div id="m34" class="mastery"></div>
+			<div id="m35" class="mastery"></div>
+		</div>
+		<div id="r3" class="row">
+			<div id="m36" class="mastery"></div>
+			<div id="m37" class="mastery"></div>
+			<div id="m38" class="mastery"></div>
+			<div id="m39" class="mastery"></div>
+		</div>
+		<div id="r4" class="row">
+			<div id="m40" class="mastery"></div>
+			<div id="m41" class="mastery"></div>
+			<div id="m42" class="mastery"></div>
+			<div id="m43" class="mastery invis"></div>
+		</div>
+		<div id="r5" class="row">
+			<div id="m44" class="mastery invis"></div>
+			<div id="m45" class="mastery"></div>
+			<div id="m46" class="mastery invis"></div>
+			<div id="m47" class="mastery invis"></div>
+		</div>
+	</div>
+	<div id="treeUtility" class="tree">
+		<div id="r0" class="row">
+			<div id="m48" class="mastery"></div>
+			<div id="m49" class="mastery"></div>
+			<div id="m50" class="mastery"></div>
+			<div id="m51" class="mastery"></div>
+		</div>
+		<div id="r1" class="row">
+			<div id="m52" class="mastery invis"></div>
+			<div id="m53" class="mastery"></div>
+			<div id="m54" class="mastery"></div>
+			<div id="m55" class="mastery"></div>
+		</div>
+		<div id="r2" class="row">
+			<div id="m56" class="mastery"></div>
+			<div id="m57" class="mastery"></div>
+			<div id="m58" class="mastery"></div>
+			<div id="m59" class="mastery"></div>
+		</div>
+		<div id="r3" class="row">
+			<div id="m60" class="mastery"></div>
+			<div id="m61" class="mastery"></div>
+			<div id="m62" class="mastery"></div>
+			<div id="m63" class="mastery"></div>
+		</div>
+		<div id="r4" class="row">
+			<div id="m64" class="mastery invis"></div>
+			<div id="m65" class="mastery"></div>
+			<div id="m66" class="mastery"></div>
+			<div id="m67" class="mastery invis"></div>
+		</div>
+		<div id="r5" class="row">
+			<div id="m68" class="mastery invis"></div>
+			<div id="m69" class="mastery"></div>
+			<div id="m70" class="mastery invis"></div>
+			<div id="m71" class="mastery invis"></div>
+		</div>
+	</div>
+</body>
+</html>
