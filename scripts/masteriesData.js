@@ -58,12 +58,14 @@ masteriesData = [
 	  max: 1,
 	  title: "Martial Mastery",
 	  description: "",
+	  dependency: "m5",
 	  invis: false
     },
     { id: "m10",
 	  max: 1,
 	  title: "Arcane Mastery",
 	  description: "",
+	  dependency: "m6",
 	  invis: false
     },
     { id: "m11",
@@ -76,6 +78,7 @@ masteriesData = [
 	  max: 1,
 	  title: "Blade Weaving",
 	  description: "",
+	  dependency: "m8",
 	  invis: false
     },
     { id: "m13",
@@ -94,6 +97,7 @@ masteriesData = [
 	  max: 1,
 	  title: "Dangerous Game",
 	  description: "",
+	  dependency: "m11",
 	  invis: false
     },
     { id: "m16",
