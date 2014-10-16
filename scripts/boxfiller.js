@@ -10,17 +10,36 @@ var Tree = function(value) {
 		for (i = startingMasteryId; i < startingMasteryId + 23; i++) {
 			var id = "m" + i;
 			var currentMastery = masteries[id];
-			blah = currentMastery;
 			var rowReqsMet = currentMastery.row * 4 <= this.points;
 
 			if (isIncrementing && currentMastery.isColored()) {
-					$("#" + id).find(".colorBlock").show();
-					$("#" + id).find(".greyBlock").hide();
+				$("#" + id).find(".colorBlock").show();
+				$("#" + id).find(".greyBlock").hide();
+
 			} else {
 				if (!currentMastery.isColored()) {
 					$("#" + id).find(".colorBlock").hide();
 					$("#" + id).find(".greyBlock").show();
-				}				
+				}
+			}
+
+			var hasDependency = typeof(currentMastery.dependency) != "undefined";
+			var color;
+
+			if (currentMastery.current == currentMastery.maximum) {
+				color = "yellow";
+			} else if (currentMastery.isColored()) {
+				color = "green";
+			} else {
+				color = "grey";
+			}
+
+			$("#" + id).css("border", "4px solid " + color);
+			if (hasDependency) {
+				var $bridge = $("#" + id).find(".bridge");
+				$bridge.css("border-right", "2px solid " + color);
+				$bridge.css("border-left", "2px solid " + color);
+				$bridge.css("background", color);
 			}
 		}
 	}
@@ -51,20 +70,29 @@ var Mastery = function(data, tree, row, coordinates) {
 		if (this.row == 0) {
 			return true;
 		}
-		var rowReqsMet = (this.row * 4 <= this.tree.points) && this.current <= this.maximum;
-		var rowCount = 0;
-		var start = (this.row - 1) * 4;
+
+		// check that prior rows have sufficient points
+		var requiredPoints = 4 * this.row;
+		var totalPointsFromPreviousRows = 0;
+		var start = this.tree.value * 24;
+		var startOfThisRow = (this.tree.value * 24) + this.row * 4;
 		var i;
-		for (i = start; i < start + 4; i++) {
-			rowCount += masteries["m" + i].current;
+		for (i = start; i < startOfThisRow; i++) {
+			totalPointsFromPreviousRows += masteries["m" + i].current;
 		}
+
+		if (totalPointsFromPreviousRows < requiredPoints) {
+			return false;
+		}
+
+		var rowReqsMet = (this.row * 4 <= this.tree.points) && this.current <= this.maximum;
 
 		var dependencyMet = true;
 		if (typeof(this.dependency) != "undefined") {
 			var dependencyMastery = masteries[this.dependency];
 			dependencyMet = dependencyMastery.current == dependencyMastery.maximum;
 		}
-		return (rowReqsMet && dependencyMet && rowCount > 3);
+		return rowReqsMet && dependencyMet;
 	};
 
 	this.canIncrement = function() {
@@ -74,7 +102,7 @@ var Mastery = function(data, tree, row, coordinates) {
 			dependencyMet = dependencyMastery.current == dependencyMastery.maximum;
 		}
 
-		return dependencyMet && this.current < this.maximum;
+		return dependencyMet && this.current < this.maximum && this.row * 4 <= this.tree.points;
 	}
 
 	this.canDecrement = function() {
@@ -86,7 +114,7 @@ var Mastery = function(data, tree, row, coordinates) {
 		var i;
 		for (i = start + 1; i < (this.tree.value + 1) * 24 - 1; i++) {
 			var m = masteries["m" + i];
-			if (m.isColored()) {
+			if (m.isColored() && m.current > 0) {
 				this.current -= 1;
 				this.tree.points -= 1;
 				if (!m.isColored()) {
@@ -104,7 +132,7 @@ var Mastery = function(data, tree, row, coordinates) {
 	this.increment = function(div) {
 		if (!this.canIncrement()) {
 			return;
-		} 
+		}
 		this.current += 1;
 		this.tree.points += 1;
 		availablePoints -= 1;
@@ -116,7 +144,6 @@ var Mastery = function(data, tree, row, coordinates) {
 		if (!this.canDecrement()) {
 			return;
 		}
-		console.log("decrement");
 		this.current -= 1;
 		this.tree.points -= 1;
 		availablePoints += 1;
@@ -131,11 +158,11 @@ var Mastery = function(data, tree, row, coordinates) {
 
 var getTree = function(treeNum) {
 	switch(treeNum) {
-		case 0: 
+		case 0:
 			return offenseTree;
-		case 1: 
+		case 1:
 			return defenseTree;
-		case 2: 
+		case 2:
 			return utilityTree;
 	}
 };
@@ -147,6 +174,15 @@ $(document).ready(function() {
 	fillData();
 	buildDom();
 	updateCounters();
+
+	// create tooltip
+	var $tooltip = $("#tooltip");
+	window.onmousemove = function(e) {
+		var x = e.clientX, y = e.clientY;
+		$tooltip.css('position', 'absolute');
+		$tooltip.css('top', (y + 20) + 'px');
+		$tooltip.css('left', (x + 20) + 'px');
+	}
 
 });
 
@@ -197,25 +233,42 @@ var buildDom = function() {
 		var id = "m" + i;
 		var mastery = masteries[id];
 
-		var box = $("#" + id);
+		var $box = $("#" + id);
 
 		var $colorBlock = $("<div />").addClass("colorBlock");
-		box.append($colorBlock);
+		$box.append($colorBlock);
 		$colorBlock.css("background-position", mastery.coordinates);
 
 		var $greyBlock = $("<div />").addClass("greyBlock");
-		box.append($greyBlock);
+		$box.append($greyBlock);
 		$greyBlock.css("background-position", mastery.coordinates);
 
 		var $pointBlock = $("<div />").addClass("pointBlock").text(mastery.calcPoints());
-		box.append($pointBlock);
+		$box.append($pointBlock);
 
 		if (typeof(mastery.dependency) != "undefined") {
 			var $bridge = $("<div />").addClass("bridge");
-			box.append($bridge);
+			$box.append($bridge);
 		}
 
-		box.mousedown(function(event) {
+		$box.hover(function(event) {
+			var $tooltip = $("#tooltip");
+			$tooltip.css("visibility", "visible");
+			currentMastery = masteries[$(event.currentTarget).attr('id')];
+			var htmlString = ""
+			htmlString += "<h2>" + currentMastery.title + "</h2>";
+			htmlString += "<h3> Rank: " + currentMastery.current + "/" + currentMastery.maximum + "</h3>";
+			$tooltip.html(htmlString);
+
+
+		}, function(event) {
+			var $tooltip = $("#tooltip");
+			$tooltip.css("visibility", "hidden");
+		});
+
+
+
+		$box.mousedown(function(event) {
 			var $clickedMastery = $(event.currentTarget);
 			var currentMastery = masteries[$clickedMastery.attr("id")];
 
